@@ -1,7 +1,7 @@
 package com.tcpserver;
 
 import com.tcpserver.handler.ChildChannelHandler;
-import com.tcpserver.task.PushTask;
+import com.tcpserver.push.PushService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -13,32 +13,25 @@ import io.netty.util.concurrent.GenericFutureListener;
 /**
  * @author chenjunlong
  */
-public class DiscardServer {
+public class TcpServer {
 
     private int port;
 
-    public DiscardServer(int port) {
+    public TcpServer(int port) {
         this.port = port;
     }
 
     public void start() throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .childHandler(new ChildChannelHandler());
+            b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 1024).childOption(ChannelOption.SO_KEEPALIVE, true).childHandler(new ChildChannelHandler());
             ChannelFuture f = b.bind(port).sync();
-            f.addListener(new GenericFutureListener<ChannelFuture>() {
-                @Override
-                public void operationComplete(ChannelFuture channelFuture) {
-                    if (channelFuture.isSuccess()) {
-                        System.out.println("DiscardServer is Running...");
-                        new PushTask();
-                    }
+            f.addListener((GenericFutureListener<ChannelFuture>) channelFuture -> {
+                if (channelFuture.isSuccess()) {
+                    new PushService();
+                    System.out.println("TcpServer is Running...");
                 }
             });
             f.channel().closeFuture().sync();
@@ -49,7 +42,7 @@ public class DiscardServer {
     }
 
     public static void main(String[] args) throws Exception {
-        new DiscardServer(7777).start();
+        new TcpServer(7777).start();
     }
 }
 

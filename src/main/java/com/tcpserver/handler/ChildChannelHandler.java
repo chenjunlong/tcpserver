@@ -17,7 +17,7 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
                 .addLast(new LineBasedFrameDecoder(1024))
                 .addLast(new StringDecoder())
                 .addLast(new StringEncoder())
-                .addLast(new DiscardServerHandler());
+                .addLast(new BizProcessHandler());
     }
 
 }

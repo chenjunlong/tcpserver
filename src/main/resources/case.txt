@@ -1,0 +1,13 @@
+{"roomId":"room001","uid":1001,"behavior":1}
+{"roomId":"room001","uid":1001,"behavior":2}
+{"roomId":"room001","uid":1001,"behavior":3,"msg":"hello"}
+
+
+{"roomId":"room001","uid":1002,"behavior":1}
+{"roomId":"room001","uid":1002,"behavior":2}
+{"roomId":"room001","uid":1002,"behavior":3,"msg":"hello2"}
+
+
+{"roomId":"room002","uid":1003,"behavior":1}
+{"roomId":"room002","uid":1003,"behavior":2}
+{"roomId":"room002","uid":1003,"behavior":3,"msg":"hello3"}
